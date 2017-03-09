@@ -16,6 +16,7 @@ class SettingsModal extends Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
 	}
 
 	handleChange(event) {
@@ -34,15 +35,36 @@ class SettingsModal extends Component {
 		this.props.closeSettingsModal();
 	}
 
+	handleRemove() {
+		this.props.removePlayer(this.state.id);
+	}
+
 	render() {
 		return (
 			<div className="settings-modal">
-				<form onSubmit={this.handleSubmit}>
-					<p><label>Name</label>
-					<input type="text" name="name" onChange={this.handleChange} value={this.state.name} /></p>
-					<p><label>Hitpoints</label>
-					<input type="text" name="hp" onChange={this.handleChange} value={this.state.hp} /></p>
-					<p><input className="btn btn-primary" type="submit" value="Update" /></p>
+				<form onSubmit={this.handleSubmit} className="form-horizontal">
+
+					<div className="form-group">
+			      <label htmlFor="name" className="col-lg-3 control-label">Name</label>
+			      <div className="col-lg-9">
+			      	<input type="text" className="form-control" name="name" onChange={this.handleChange} value={this.state.name} />
+			      </div>
+			    </div>
+
+			    <div className="form-group">
+			      <label htmlFor="hitpoints" className="col-lg-3 control-label">Hitpoints</label>
+			      <div className="col-lg-9">
+							<input type="text" name="hp" className="form-control" onChange={this.handleChange} value={this.state.hp} />
+			      </div>
+			    </div>
+
+			    <div className="form-group">
+			      <div className="col-lg-9 col-lg-offset-3">
+			      	<input className="btn btn-default col-lg-5" type="submit" value="Update" />
+			      	<input className="btn btn-danger disabled col-lg-5 col-lg-offset-1" onClick={this.handleRemove} value="Delete" />
+			      </div>
+			    </div>
+
 				</form>
 			</div>
 		);
@@ -88,12 +110,28 @@ class AddPlayerModal extends Component {
 	render() {
 		return (
 			<div className="player-modal">
-				<form onSubmit={this.handleSubmit}>
-					<p><label>Name</label>
-					<input type="text" name="name" onChange={this.handleChange} value={this.state.name} /></p>
-					<p><label>Hitpoints</label>
-					<input type="text" name="hp" onChange={this.handleChange} value={this.state.hp} /></p>
-					<p><input className="btn btn-primary" type="submit" value="Add" /></p>
+				<form onSubmit={this.handleSubmit} className="form-horizontal">
+
+					<div className="form-group">
+			      <label htmlFor="name" className="col-lg-3 control-label">Name</label>
+			      <div className="col-lg-9">
+			      	<input type="text" className="form-control" name="name" onChange={this.handleChange} value={this.state.name} />
+			      </div>
+			    </div>
+
+			    <div className="form-group">
+			      <label htmlFor="hitpoints" className="col-lg-3 control-label">Hitpoints</label>
+			      <div className="col-lg-9">
+							<input type="text" name="hp" className="form-control" onChange={this.handleChange} value={this.state.hp} />
+			      </div>
+			    </div>
+
+			    <div className="form-group">
+			      <div className="col-lg-9 col-lg-offset-3">
+			      	<input className="btn btn-default" type="submit" value="Add" />
+			      </div>
+			    </div>
+
 				</form>
 			</div>
 		);
@@ -198,6 +236,7 @@ class Lifecounter extends Component {
 		this.openAddPlayerModal = this.openAddPlayerModal.bind(this);
 		this.closeAddPlayerModal = this.closeAddPlayerModal.bind(this);
 		this.addPlayer = this.addPlayer.bind(this);
+		this.removePlayer = this.removePlayer.bind(this);
 		this.updatePlayer = this.updatePlayer.bind(this);
 		this.resetLifeTotal = this.resetLifeTotal.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -251,6 +290,15 @@ class Lifecounter extends Component {
 				alive: true,
 				flair: this.state.flair[this.randomNumber()]})
 		});
+	}
+
+	removePlayer(id) {
+		const newState = this.state.players.map((player,i) => {
+			if(player.id === id) {
+				return update(this.state, {players: {$splice: [[i,1]]}});
+			}
+		});
+		this.setState({players:newState});
 	}
 
 	updatePlayer(id,name,hp) {
@@ -318,6 +366,7 @@ class Lifecounter extends Component {
       	>
 	      	<SettingsModal player={this.state.currentPlayer}
 	      		updatePlayer={this.updatePlayer}
+	      		removePlayer={this.removePlayer}
 	      		closeSettingsModal={this.closeSettingsModal} />
 	      </ReactModal>
       </div>
