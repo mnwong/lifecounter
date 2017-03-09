@@ -54,11 +54,19 @@ class AddPlayerModal extends Component {
 		super();
 		this.state = {
 			name: '',
-			hp: 40
+			hp: ''
 		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	componentWillMount() {
+		this.setState({ hp: this.props.defaultHp });  
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({ hp: nextProps.defaultHp });
 	}
 
 	handleChange(event) {
@@ -98,7 +106,8 @@ class PlayerContainer extends Component {
 		super(props);
 
 		this.state = {
-			hp: ''
+			hp: '',
+			alive: ''
 		};
 
 		this.updateScore = this.updateScore.bind(this);
@@ -107,11 +116,13 @@ class PlayerContainer extends Component {
 	}
 
 	componentWillMount() {
-		this.setState({ hp: this.props.player.hp });  
+		this.setState({ hp: this.props.player.hp,
+			alive: this.props.player.alive });  
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({ hp: nextProps.player.hp });
+		this.isAlive(nextProps.player.hp);
 	}
 
 	sendModalInfo() {
@@ -137,7 +148,7 @@ class PlayerContainer extends Component {
 	render() {
 		return (
 			<div className="player-container col-md-4">
-				<div className={"panel panel-default"+(this.state.alive ? '':' player-dead')}>
+				<div className={"panel panel-default"+(this.state.alive ? '':' player-dead')+' '+this.props.player.flair}>
 					<div className="panel-heading">
 						<h3>{this.props.player.name}</h3>
 						<a onClick={this.sendModalInfo}>
@@ -178,7 +189,8 @@ class Lifecounter extends Component {
 			showAddPlayerModal: false,
 			currentPlayer:'',
 			players: [],
-			defaultHp: 40
+			defaultHp: 40,
+			flair: ['flair-mountain','flair-plains','flair-forest','flair-swamp','flair-island']
 		};
 
 		this.openSettingsModal = this.openSettingsModal.bind(this);
@@ -187,6 +199,8 @@ class Lifecounter extends Component {
 		this.closeAddPlayerModal = this.closeAddPlayerModal.bind(this);
 		this.addPlayer = this.addPlayer.bind(this);
 		this.updatePlayer = this.updatePlayer.bind(this);
+		this.resetLifeTotal = this.resetLifeTotal.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
 	openSettingsModal(player) {
@@ -205,9 +219,38 @@ class Lifecounter extends Component {
 		this.setState({ showAddPlayerModal: false });
 	}
 
+	handleChange(event) {
+		const target = event.target;
+		const value = target.value;
+
+		this.setState({ defaultHp: value });
+	}
+
+	randomNumber() {
+		return Math.floor((Math.random() * this.state.flair.length) + 0);
+	}
+
+	resetLifeTotal() {
+		const newState = this.state.players.map((player) => {
+			const newData = update(player, {
+				hp: {$set: this.state.defaultHp},
+				alive: {$set: true}
+			});
+			return newData;
+		});
+
+		this.setState({players:newState});
+	}
+
 	addPlayer(name,hp) {
 		const id = shortid.generate();
-		this.setState({ players: this.state.players.concat({id: id, name: name, hp: hp}) });
+		this.setState({ players: 
+			this.state.players.concat({id: id, 
+				name: name, 
+				hp: hp, 
+				alive: true,
+				flair: this.state.flair[this.randomNumber()]})
+		});
 	}
 
 	updatePlayer(id,name,hp) {
@@ -238,7 +281,16 @@ class Lifecounter extends Component {
           	<Icon name='heart' className="logo-heart" />
           	<Icon name='heart-o' className="logo-heart" />
         </div>
-        <button className="btn btn-default" onClick={this.openAddPlayerModal}>Add Player</button>
+        
+				<div className="form-inline">
+				  <button className="btn btn-default" onClick={this.openAddPlayerModal}>Add Player</button>
+				  <button className="btn btn-danger" onClick={this.resetLifeTotal}>Reset Life</button>
+				  <div className="input-group">
+				    <div className="input-group-addon">Life Start</div>
+				    <input type="text" className="form-control" onChange={this.handleChange} value={this.state.defaultHp} />
+				  </div>
+				</div>
+
         <div className="lifecounter-container container">
         	<div className="row">
 		        {this.state.players.map((player) => 
@@ -255,7 +307,8 @@ class Lifecounter extends Component {
 	      	style={modalStyles}
       	>
 	      	<AddPlayerModal addPlayer={this.addPlayer}
-	      		closeAddPlayerModal={this.closeAddPlayerModal} />
+	      		closeAddPlayerModal={this.closeAddPlayerModal}
+	      		defaultHp={this.state.defaultHp} />
 	      </ReactModal>
 
 	      <ReactModal

@@ -11,6 +11,14 @@
   margin-bottom: 20px;
 }
 
+.lifecounter .form-inline .input-group input {
+	width: 60px;
+}
+
+.lifecounter .form-inline button {
+	margin: 0 15px 0 0;
+}
+
 .player-container {
 	padding: 20px;
 }
@@ -41,6 +49,7 @@
 .fa.logo-heart {
 	padding: 0 4px;
 	font-size: 1.5em;
+	color: #ff0039;
 }
 
 .lifecounter-header h1 {
@@ -49,8 +58,33 @@
 	margin-right: .3em;
 }
 
-.panel-default {
-	background: url(http://magic.wizards.com/sites/mtg/files/image_legacy_migration/images/magic/daily/arcana/1012_swamp2.jpg);
+.panel {
+	border: none;
+}
+
+.flair-plains {
+	background: url(../public/images/flair-plains.jpg) center top;
+	background-size: 100% auto;
+}
+
+.flair-island {
+	background: url(../public/images/flair-island.jpg) center top;
+	background-size: 180% auto;
+}
+
+.flair-mountain {
+	background: url(../public/images/flair-mountain.jpg) center top;
+	background-size: 100% auto;
+}
+
+.flair-swamp {
+	background: url(../public/images/flair-swamp.jpg) center top;
+	background-size: 100% auto;
+}
+
+.flair-forest {
+	background: url(../public/images/flair-forest.jpg) center top;
+	background-size: 100% auto;
 }
 
 .panel.player-dead .panel-heading h3:before {
@@ -62,7 +96,7 @@
 }
 
 .panel-body {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .panel-body h4 {
