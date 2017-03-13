@@ -64,27 +64,27 @@
 
 .flair-plains {
 	background: url(../public/images/flair-plains.jpg) center top;
-	background-size: 100% auto;
+	background-size: 110% auto;
 }
 
 .flair-island {
 	background: url(../public/images/flair-island.jpg) center top;
-	background-size: 180% auto;
+	background-size: 145% auto;
 }
 
 .flair-mountain {
 	background: url(../public/images/flair-mountain.jpg) center top;
-	background-size: 100% auto;
+	background-size: 110% auto;
 }
 
 .flair-swamp {
 	background: url(../public/images/flair-swamp.jpg) center top;
-	background-size: 100% auto;
+	background-size: 110% auto;
 }
 
 .flair-forest {
 	background: url(../public/images/flair-forest.jpg) center top;
-	background-size: 100% auto;
+	background-size: 110% auto;
 }
 
 .panel.player-dead .panel-heading h3:before {
@@ -96,12 +96,17 @@
 }
 
 .panel-body {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px 0;
 }
 
 .panel-body h4 {
-    font-size: 60px;
+    font-size: 70px;
     margin-bottom: 20.5px;
+    font-weight: 400;
 }
 
+.btn-default {
+	border-color: #353535;
+}
 
